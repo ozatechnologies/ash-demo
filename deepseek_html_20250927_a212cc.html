@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AshTrade - Unified Coal Ash Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c5282;
+            --accent: #4a7bc8;
+            --light: #f8f9fa;
+            --dark: #333;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a6bb8;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26, 58, 95, 0.9), rgba(44, 82, 130, 0.9)), url('https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3') center/cover;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 40px 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border-top: 4px solid var(--accent);
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        /* Listings Section */
+        .listings {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .listings-header {
+            padding: 20px;
+            background: var(--light);
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .listing-item {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+            transition: background 0.3s;
+        }
+        
+        .listing-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .listing-item:last-child {
+            border-bottom: none;
+        }
+        
+        .listing-info {
+            flex: 1;
+        }
+        
+        .listing-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .listing-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .tag-premium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .tag-verified {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Quality Metrics */
+        .quality-metrics {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .metric i {
+            color: var(--accent);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .listing-item {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .listing-actions {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-industry"></i>
+                    <span>AshTrade</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Dashboard</a></li>
+                        <li><a href="#">Marketplace</a></li>
+                        <li><a href="#">My Listings</a></li>
+                        <li><a href="#">Analytics</a></li>
+                        <li><a href="#">Logistics</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <button class="btn btn-outline"><i class="fas fa-bell"></i></button>
+                    <div class="user-profile">
+                        <img src="https://i.pravatar.cc/40" alt="User" style="border-radius: 50%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Unified Coal Ash Marketplace</h1>
+            <p>Connecting power plants with industrial buyers for efficient trading of coal ash by-products</p>
+            <button class="btn btn-primary">List Your Ash</button>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Market Overview</h2>
+                <div>
+                    <button class="btn btn-primary" id="openListingModal"><i class="fas fa-plus"></i> New Listing</button>
+                </div>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <i class="fas fa-weight-hanging"></i>
+                    <h3>1,245 MT</h3>
+                    <p>Available Today</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-rupee-sign"></i>
+                    <h3>₹450-650</h3>
+                    <p>Price Range per MT</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-industry"></i>
+                    <h3>42</h3>
+                    <p>Active Suppliers</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>128</h3>
+                    <p>Active Buyers</p>
+                </div>
+            </div>
+            
+            <div class="listings">
+                <div class="listings-header">
+                    <h3>Recent Listings</h3>
+                    <div>
+                        <input type="text" placeholder="Search listings..." class="form-control" style="width: 250px;">
+                    </div>
+                </div>
+                
+                <div class="filters">
+                    <select class="filter-select">
+                        <option>All Types</option>
+                        <option>Fly Ash</option>
+                        <option>Bottom Ash</option>
+                        <option>Pond Ash</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>All Locations</option>
+                        <option>North India</option>
+                        <option>South India</option>
+                        <option>East India</option>
+                        <option>West India</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>Sort by: Newest</option>
+                        <option>Sort by: Price Low to High</option>
+                        <option>Sort by: Price High to Low</option>
+                    </select>
+                </div>
+                
+                <div class="listing-item">
+                    <div class="listing-info">
+                        <h4>Premium Fly Ash - Grade I</h4>
+                        <p>NTPC Limited, Dadri • Available: 250 MT</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Uttar Pradesh</span>
+                            <span><i class="fas fa-clock"></i> Listed 2 hours ago</span>
+                            <span class="tag tag-verified"><i class="fas fa-check-circle"></i> Quality Verified</span>
+                        </div>
+                        <div class="quality-metrics">
+                            <div class="metric"><i class="fas fa-fire"></i> LOI: 2.5%</div>
+                            <div class="metric"><i class="fas fa-vial"></i> SiO2: 58%</div>
+                            <div class="metric"><i class="fas fa-atom"></i> Fineness: 325 mesh</div>
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        <div class="price">₹520/MT</div>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="listing-item">
+                    <div class="listing-info">
+                        <h4>Pond Ash - Construction Grade</h4>
+                        <p>Adani Power, Mundra • Available: 500 MT</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Gujarat</span>
+                            <span><i class="fas fa-clock"></i> Listed 5 hours ago</span>
+                            <span class="tag tag-premium"><i class="fas fa-crown"></i> Premium Supplier</span>
+                        </div>
+                        <div class="quality-metrics">
+                            <div class="metric"><i class="fas fa-fire"></i> LOI: 4.2%</div>
+                            <div class="metric"><i class="fas fa-vial"></i> SiO2: 52%</div>
+                            <div class="metric"><i class="fas fa-atom"></i> Moisture: 8%</div>
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        <div class="price">₹480/MT</div>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="listing-item">
+                    <div class="listing-info">
+                        <h4>Bottom Ash - Cement Grade</h4>
+                        <p>TSGENCO, Hyderabad • Available: 180 MT</p>
+                        <div class="listing-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> Telangana</span>
+                            <span><i class="fas fa-clock"></i> Listed 1 day ago</span>
+                            <span class="tag tag-verified"><i class="fas fa-check-circle"></i> Quality Verified</span>
+                        </div>
+                        <div class="quality-metrics">
+                            <div class="metric"><i class="fas fa-fire"></i> LOI: 3.8%</div>
+                            <div class="metric"><i class="fas fa-vial"></i> SiO2: 48%</div>
+                            <div class="metric"><i class="fas fa-atom"></i> Fineness: 250 mesh</div>
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        <div class="price">₹450/MT</div>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Listing Modal -->
+    <div class="modal" id="listingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Listing</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="listingForm">
+                    <div class="form-group">
+                        <label for="ashType">Ash Type</label>
+                        <select id="ashType" class="form-control">
+                            <option value="">Select Ash Type</option>
+                            <option value="fly-ash">Fly Ash</option>
+                            <option value="bottom-ash">Bottom Ash</option>
+                            <option value="pond-ash">Pond Ash</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Quantity (in MT)</label>
+                        <input type="number" id="quantity" class="form-control" placeholder="Enter quantity">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price">Price per MT (₹)</label>
+                        <input type="number" id="price" class="form-control" placeholder="Enter price">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" class="form-control" placeholder="Enter location">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quality">Quality Specifications</label>
+                        <textarea id="quality" class="form-control" rows="3" placeholder="Describe quality parameters"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">List Ash</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AshTrade</h3>
+                    <p>Transforming coal ash from waste to valuable resource through a unified digital marketplace.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">For Suppliers</a></li>
+                        <li><a href="#">For Buyers</a></li>
+                        <li><a href="#">Quality Standards</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 AshTrade - Unified Coal Ash Marketplace. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('listingModal');
+        const openBtn = document.getElementById('openListingModal');
+        const closeBtn = document.querySelector('.close');
+        
+        openBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Form submission
+        document.getElementById('listingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Your ash listing has been submitted successfully!');
+            modal.style.display = 'none';
+            // In a real app, you would send the data to a server here
+        });
+        
+        // Simulate real-time updates
+        setInterval(() => {
+            const stats = document.querySelectorAll('.stat-card h3');
+            if (stats.length > 0) {
+                // Randomly update the available quantity
+                const availableMT = stats[0];
+                const currentValue = parseInt(availableMT.textContent);
+                const newValue = currentValue + Math.floor(Math.random() * 10) - 3;
+                if (newValue > 0) {
+                    availableMT.textContent = newValue + ' MT';
+                }
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
